@@ -45,7 +45,7 @@ class DealAgentFramework:
         client = chromadb.PersistentClient(path=self.DB)
         self.memory = self.read_memory()
         self.collection = client.get_or_create_collection('products')
-        self.planner = None
+        self.planner: Optional[PlanningAgent] = None
 
     def init_agents_as_needed(self):
         if not self.planner:
@@ -62,7 +62,7 @@ class DealAgentFramework:
         return []
 
     def write_memory(self) -> None:
-        data = [opportunity.dict() for opportunity in self.memory]
+        data = [opportunity.model_dump() for opportunity in self.memory]
         with open(self.MEMORY_FILENAME, "w") as file:
             json.dump(data, file, indent=2)
 
